@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <title data-i18n="evaluation.title">Evaluation | Puldistro</title>
+  <script src="../js/theme-init.js"></script>
+  <link rel="stylesheet" href="../css/evaluation.css" />
+  <link rel="stylesheet" href="../css/theme.css?v=20260524-no-cursor-effect" />
+  <script src="../js/i18n.js?v=20260524-live-locales" defer></script>
+  <script src="../js/theme.js?v=20260524-no-cursor-effect" defer></script>
+</head>
+<body>
+  <main class="shell">
+    <nav class="nav"><a class="brand" href="../index.html"><span class="mark">◇</span><span data-i18n="common.brand">Puldistro</span></a><div class="nav-links"><a class="btn" href="../index.html" data-i18n="common.distro_quiz">Distro quiz</a><a class="btn" href="alternatives.html" data-i18n="common.app_alternatives">App alternatives</a><a class="btn" href="glossary.html" data-i18n="common.glossary">Glossary</a><a class="btn primary" href="evaluation.html" data-i18n="common.evaluation">Evaluation</a><button class="btn theme-toggle" type="button" data-theme-toggle aria-label="Switch theme" data-i18n-attr-aria-label="common.switch_theme"><span class="theme-icon" aria-hidden="true">☀️</span><span class="theme-label" data-i18n="common.theme">Theme</span></button><label class="btn language-toggle"><span data-i18n="common.language_label">Language</span><select class="language-select" data-language-select aria-label="Language"><option value="en">English</option><option value="de">Deutsch</option></select></label></div></nav>
+
+    <article class="page glass">
+      <div class="eyebrow" data-i18n="evaluation.eyebrow">Evaluation model</div>
+      <h1 data-i18n="evaluation.heading">How Puldistro evaluates your Linux fit.</h1>
+      <p class="lead" data-i18n="evaluation.intro">The quiz does not rank Linux distributions by objective quality. It compares your answers with preference profiles for distributions, desktop environments, and window managers, then returns the strongest matches.</p>
+
+      <section>
+        <h2 data-i18n="evaluation.what_title">What is evaluated?</h2>
+        <div class="info-grid">
+          <div class="info-card"><h3 data-i18n="evaluation.what_experience_title">Experience and maintenance comfort</h3><p data-i18n="evaluation.what_experience_text">How comfortable you are with Linux concepts, terminal work, manual troubleshooting, documentation, and rolling updates.</p></div>
+          <div class="info-card"><h3 data-i18n="evaluation.what_hardware_title">Hardware and device needs</h3><p data-i18n="evaluation.what_hardware_text">Older hardware, laptops, NVIDIA, gaming PCs, vendor support expectations, and whether polished defaults matter more than control.</p></div>
+          <div class="info-card"><h3 data-i18n="evaluation.what_workflow_title">Apps, games, and workflow</h3><p data-i18n="evaluation.what_workflow_text">Gaming, development, creative work, privacy preferences, Windows-like workflows, and tolerance for fallback options.</p></div>
+          <div class="info-card"><h3 data-i18n="evaluation.what_desktop_title">Desktop style</h3><p data-i18n="evaluation.what_desktop_text">Preference for traditional desktops, modern desktops, keyboard-driven tiling, customization, simplicity, and Wayland-first setups.</p></div>
+        </div>
+      </section>
+
+      <section>
+        <h2 data-i18n="evaluation.how_title">How is it evaluated?</h2>
+        <p data-i18n="evaluation.how_text">Each answer adds weighted preference signals such as beginner-friendly, stable, automated, privacy-focused, gaming-ready, developer-oriented, rolling-release, KDE, GNOME, tiling, Wayland, and customization. Distributions and interfaces have matching profiles. The highest scoring profiles are shown as recommendations.</p>
+        <p class="note" data-i18n="evaluation.note">Scores are explainable preference matches, not guarantees. Always test your real hardware, required apps, games, peripherals, and documents before replacing an existing system.</p>
+      </section>
+
+      <section>
+        <h2 data-i18n="evaluation.why_title">Why are these criteria evaluated?</h2>
+        <p data-i18n="evaluation.why_text">Most bad Linux migrations happen because expectations and workflow requirements do not match the chosen distribution. A beginner may need stable defaults and a large community, while an advanced user may prefer fast updates, deep control, or a tiling window manager. The evaluation tries to make those trade-offs visible before installation.</p>
+      </section>
+
+      <section>
+        <h2 data-i18n="evaluation.possible_title">Possible recommendation targets</h2>
+        <div class="list-grid">
+          <div class="list-card"><h3 data-i18n="evaluation.distros_title">Distributions</h3><ul class="tag-list"><li><a href="https://linuxmint.com/" target="_blank" rel="noopener noreferrer">Linux Mint</a></li><li><a href="https://ubuntu.com/" target="_blank" rel="noopener noreferrer">Ubuntu</a></li><li><a href="https://kubuntu.org/" target="_blank" rel="noopener noreferrer">Kubuntu</a></li><li><a href="https://www.debian.org/" target="_blank" rel="noopener noreferrer">Debian</a></li><li><a href="https://fedoraproject.org/workstation/" target="_blank" rel="noopener noreferrer">Fedora Workstation</a></li><li><a href="https://archlinux.org/" target="_blank" rel="noopener noreferrer">Arch Linux</a></li><li><a href="https://endeavouros.com/" target="_blank" rel="noopener noreferrer">EndeavourOS</a></li><li><a href="https://cachyos.org/" target="_blank" rel="noopener noreferrer">CachyOS</a></li><li><a href="https://manjaro.org/" target="_blank" rel="noopener noreferrer">Manjaro</a></li><li><a href="https://www.gentoo.org/" target="_blank" rel="noopener noreferrer">Gentoo</a></li><li><a href="https://mxlinux.org/" target="_blank" rel="noopener noreferrer">MX Linux</a></li><li><a href="https://system76.com/pop/" target="_blank" rel="noopener noreferrer">Pop!_OS</a></li><li><a href="https://bazzite.gg/" target="_blank" rel="noopener noreferrer">Bazzite</a></li><li><a href="https://chimeraos.org/" target="_blank" rel="noopener noreferrer">ChimeraOS</a></li><li><a href="https://nobaraproject.org/" target="_blank" rel="noopener noreferrer">Nobara</a></li><li><a href="https://pika-os.com/" target="_blank" rel="noopener noreferrer">PikaOS</a></li><li><a href="https://fedoraproject.org/spins/kde/" target="_blank" rel="noopener noreferrer">Fedora KDE Plasma</a></li><li><a href="https://fedoraproject.org/atomic-desktops/" target="_blank" rel="noopener noreferrer">Fedora Silverblue/Kinoite</a></li><li><a href="https://neon.kde.org/" target="_blank" rel="noopener noreferrer">KDE neon</a></li><li><a href="https://get.opensuse.org/tumbleweed/" target="_blank" rel="noopener noreferrer">openSUSE Tumbleweed</a></li><li><a href="https://get.opensuse.org/leap/" target="_blank" rel="noopener noreferrer">openSUSE Leap</a></li><li><a href="https://zorin.com/os/" target="_blank" rel="noopener noreferrer">Zorin OS</a></li><li><a href="https://elementary.io/" target="_blank" rel="noopener noreferrer">elementary OS</a></li><li><a href="https://garudalinux.org/" target="_blank" rel="noopener noreferrer">Garuda Linux</a></li><li><a href="https://nixos.org/" target="_blank" rel="noopener noreferrer">NixOS</a></li><li><a href="https://voidlinux.org/" target="_blank" rel="noopener noreferrer">Void Linux</a></li><li><a href="https://www.alpinelinux.org/" target="_blank" rel="noopener noreferrer">Alpine Linux</a></li><li><a href="https://www.tuxedocomputers.com/en/TUXEDO-OS_1.tuxedo" target="_blank" rel="noopener noreferrer">TUXEDO OS</a></li><li><a href="https://getsol.us/" target="_blank" rel="noopener noreferrer">Solus</a></li></ul></div>
+          <div class="list-card"><h3 data-i18n="evaluation.interfaces_title">Desktop environments and window managers</h3><ul class="tag-list"><li><a href="https://kde.org/plasma-desktop/" target="_blank" rel="noopener noreferrer">KDE Plasma</a></li><li><a href="https://www.gnome.org/" target="_blank" rel="noopener noreferrer">GNOME</a></li><li><a href="https://xfce.org/" target="_blank" rel="noopener noreferrer">Xfce</a></li><li><a href="https://projects.linuxmint.com/cinnamon/" target="_blank" rel="noopener noreferrer">Cinnamon</a></li><li><a href="https://mate-desktop.org/" target="_blank" rel="noopener noreferrer">MATE</a></li><li><a href="https://buddiesofbudgie.org/" target="_blank" rel="noopener noreferrer">Budgie</a></li><li><a href="https://hypr.land/" target="_blank" rel="noopener noreferrer">Hyprland</a></li><li><a href="https://swaywm.org/" target="_blank" rel="noopener noreferrer">Sway</a></li><li><a href="https://github.com/YaLTeR/niri" target="_blank" rel="noopener noreferrer">niri</a></li><li><a href="https://i3wm.org/" target="_blank" rel="noopener noreferrer">i3</a></li></ul></div>
+        </div>
+      </section>
+    </article>
+
+    <footer class="site-footer glass"><div class="footer-top"><div><div class="footer-brand" data-i18n="common.brand">Puldistro</div><p class="footer-text" data-i18n="common.footer_text">A beginner-friendly Linux migration helper. Recommendations are educational starting points, not guarantees for every device or workflow.</p></div><nav class="footer-links" aria-label="Footer navigation" data-i18n-attr-aria-label="common.footer_aria"><a href="../index.html" data-i18n="common.distro_quiz">Distro quiz</a><a href="alternatives.html" data-i18n="common.app_alternatives">App alternatives</a><a href="fallback.html" data-i18n="common.fallback_guide">Fallback guide</a><a href="glossary.html" data-i18n="common.glossary">Glossary</a><a href="evaluation.html" data-i18n="common.evaluation">Evaluation</a><a href="about.html" data-i18n="common.about">About</a><a href="contact.html" data-i18n="common.contact">Contact</a><a href="privacy.html" data-i18n="common.privacy">Privacy</a><a href="legal.html" data-i18n="common.legal_notice">Legal notice</a><a href="https://github.com/firstp1ck/puldistro" target="_blank" rel="noopener noreferrer" data-i18n="common.github">GitHub</a></nav></div><div class="footer-bottom" data-i18n="common.footer_bottom">© 2026 Puldistro. Linux is a registered trademark of Linus Torvalds. Distribution, desktop, and app names belong to their respective owners.</div></footer>
+  </main>
+</body>
+</html>

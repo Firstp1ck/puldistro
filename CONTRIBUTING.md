@@ -1,8 +1,8 @@
-# Contributing to puldistro
+# Contributing to Puldistro
 
-Thanks for helping improve puldistro.
+Thanks for helping improve Puldistro.
 
-puldistro is meant to help people choose Linux with clear, honest, beginner-friendly information. Contributions should make the site easier to understand, more accurate, or more useful for people considering a switch to Linux.
+Puldistro is meant to help people choose Linux with clear, honest, beginner-friendly information. Contributions should make the site easier to understand, more accurate, or more useful for people considering a switch to Linux.
 
 ## Good contribution ideas
 
@@ -52,7 +52,7 @@ Good feature requests explain:
 
 - Who the feature helps
 - What problem it solves
-- Why it fits puldistro
+- Why it fits Puldistro
 - Any risks, such as making the quiz too complicated
 
 ## Pull requests
