@@ -5,4 +5,4 @@ pages_build_output_dir = "."
 [[d1_databases]]
 binding = "DB"
 database_name = "puldistro-quiz-results-local"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "9059ac0b-ff24-4b88-b9ab-aa95980d4e5b"
