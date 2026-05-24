@@ -20,6 +20,7 @@ The recommendations are starting points, not guarantees. Before replacing Window
 ## Pages included
 
 - **Distro quiz** — get Linux recommendations
+- **Quiz Q&A** — browse all quiz questions, answer choices, and scoring signals
 - **App alternatives** — find possible replacements for familiar software
 - **Glossary** — understand Linux terms
 - **Fallback guide** — keep a safety plan for things that still need Windows or macOS
