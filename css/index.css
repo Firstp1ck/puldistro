@@ -103,6 +103,10 @@
     .combo .combo-kind { display: inline; color: #cbd5e1; font-size: 13px; }
     .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
     .tag { font-size: 12px; font-weight: 800; color: #dbeafe; padding: 7px 9px; border-radius: 999px; background: rgba(59, 130, 246, .15); border: 1px solid rgba(147, 197, 253, .18); }
+    .share-results { margin-top: 18px; padding: 24px; display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; }
+    .share-results h3 { margin: 0 0 8px; }
+    .share-results p { color: var(--muted); line-height: 1.55; margin: 0; }
+    .share-status { grid-column: 1 / -1; min-height: 1.4em; font-weight: 800; }
     .other-matches { margin-top: 18px; padding: 24px; }
     .other-matches h3 { margin-top: 0; }
     .mini-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; color: #cbd5e1; }
@@ -123,6 +127,7 @@
       .hero { grid-template-columns: 1fr; min-height: auto; }
       .result-grid { grid-template-columns: 1fr; }
       .mini-list { grid-template-columns: 1fr; }
+      .share-results { grid-template-columns: 1fr; }
       .shell { padding: 24px 0; }
       .nav { align-items: flex-start; flex-direction: column; }
     }

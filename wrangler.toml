@@ -1,0 +1,8 @@
+name = "puldistro"
+compatibility_date = "2026-05-24"
+pages_build_output_dir = "."
+
+[[d1_databases]]
+binding = "DB"
+database_name = "puldistro-quiz-results-local"
+database_id = "00000000-0000-0000-0000-000000000000"

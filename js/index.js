@@ -71,12 +71,16 @@
     const resultGrid = document.getElementById("resultGrid");
     const compatNotes = document.getElementById("compatNotes");
     const otherMatches = document.getElementById("otherMatches");
+    const shareResultsBtn = document.getElementById("shareResultsBtn");
+    const shareResultsStatus = document.getElementById("shareResultsStatus");
 
     let activeQuestions = [];
     let activeMaxTier = 1;
+    let activeMode = "simple";
     let index = 0;
     let history = [];
     let scores = Object.fromEntries(CRITERIA.map(c => [c, 0]));
+    let latestAnonymousResult = null;
 
     function refreshActiveQuestions() {
       activeQuestions = questions().filter(question => question.tier <= activeMaxTier);
@@ -102,10 +106,14 @@
     }
 
     function start(mode) {
-      activeMaxTier = mode === "simple" ? 1 : mode === "medium" ? 2 : 3;
+      activeMode = mode === "simple" || mode === "medium" || mode === "detailed" ? mode : "simple";
+      activeMaxTier = activeMode === "simple" ? 1 : activeMode === "medium" ? 2 : 3;
       refreshActiveQuestions();
       index = 0;
       history = [];
+      latestAnonymousResult = null;
+      if (shareResultsStatus) shareResultsStatus.textContent = "";
+      if (shareResultsBtn) shareResultsBtn.disabled = false;
       scores = Object.fromEntries(CRITERIA.map(c => [c, 0]));
       home.style.display = "none";
       results.style.display = "none";
@@ -133,7 +141,14 @@
     }
 
     function choose(answer) {
-      history.push(answer.weights);
+      const current = activeQuestions[index];
+      history.push({
+        questionId: current.id,
+        category: current.category,
+        answerIndex: current.answers.indexOf(answer),
+        answerLabel: answer.label,
+        weights: answer.weights,
+      });
       Object.entries(answer.weights).forEach(([key, value]) => scores[key] = (scores[key] || 0) + value);
       index += 1;
       if (index >= activeQuestions.length) showResults(); else renderQuestion();
@@ -141,8 +156,8 @@
 
     function goBack() {
       if (index === 0) return;
-      const previousWeights = history.pop();
-      Object.entries(previousWeights).forEach(([key, value]) => scores[key] = (scores[key] || 0) - value);
+      const previous = history.pop();
+      Object.entries(previous.weights).forEach(([key, value]) => scores[key] = (scores[key] || 0) - value);
       index -= 1;
       renderQuestion();
     }
@@ -234,10 +249,48 @@
         row.innerHTML = `<span>${distro.name} + ${desktop.name}</span><strong>${Math.max(1, Math.round(distro.match * 100))}%</strong>`;
         otherMatches.appendChild(row);
       });
+      latestAnonymousResult = {
+        mode: activeMode,
+        language: window.DistroI18n?.language || document.documentElement.lang || "en",
+        answers: history,
+        scores,
+        topResults: ranked.slice(0, 10).map((distro, i) => {
+          const desktop = recommendInterface(distro);
+          return {
+            rank: i + 1,
+            distro: distro.name,
+            interface: desktop.name,
+            matchPercent: Math.max(1, Math.round(distro.match * 100)),
+          };
+        }),
+      };
       window.scrollTo({top: 0, behavior: "smooth"});
     }
 
+    async function shareAnonymousResult() {
+      if (!latestAnonymousResult || !shareResultsBtn) return;
+      shareResultsBtn.disabled = true;
+      shareResultsStatus.textContent = tr("index.share_sending", "Sending anonymous result…");
+      try {
+        const response = await fetch("/api/quiz-result", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(latestAnonymousResult),
+        });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || data.ok !== true) throw new Error(data.error || `HTTP ${response.status}`);
+        shareResultsStatus.textContent = tr("index.share_success", "Thank you — anonymous result saved.");
+      } catch (error) {
+        console.warn("Could not share anonymous quiz result", error);
+        shareResultsBtn.disabled = false;
+        shareResultsStatus.textContent = tr("index.share_error", "Could not send the result. Please try again later.");
+      }
+    }
+
     function restart() {
+      latestAnonymousResult = null;
+      if (shareResultsStatus) shareResultsStatus.textContent = "";
+      if (shareResultsBtn) shareResultsBtn.disabled = false;
       home.style.display = "grid";
       app.style.display = "none";
       results.style.display = "none";
@@ -248,6 +301,7 @@
     backBtn.addEventListener("click", goBack);
     restartBtn.addEventListener("click", restart);
     againBtn.addEventListener("click", restart);
+    shareResultsBtn?.addEventListener("click", shareAnonymousResult);
     window.addEventListener("i18n:applied", () => {
       if (app.style.display === "flex" && activeQuestions.length) {
         refreshActiveQuestions();
