@@ -1,6 +1,6 @@
     (() => {
       try {
-        const stored = localStorage.getItem("distropicker-theme");
+        const stored = localStorage.getItem("puldistro-theme");
         const theme = stored === "light" || stored === "dark"
           ? stored
           : (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");

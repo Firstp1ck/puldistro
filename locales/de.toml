@@ -1,9 +1,9 @@
 [meta]
 language = "Deutsch"
-site_title = "Linux-Distro-Helfer"
+site_title = "puldistro"
 
 [common]
-brand = "DistroPicker"
+brand = "puldistro"
 distro_quiz = "Distro-Quiz"
 app_alternatives = "App-Alternativen"
 fallback_guide = "Fallback-Leitfaden"
@@ -19,11 +19,11 @@ dark = "Dunkel"
 switch_to_mode = "Zum {theme}-Modus wechseln"
 language_label = "Sprache"
 footer_text = "Ein einsteigerfreundlicher Helfer für den Umstieg auf Linux. Empfehlungen sind pädagogische Ausgangspunkte, keine Garantien für jedes Gerät oder jeden Workflow."
-footer_bottom = "© 2026 DistroPicker. Linux ist eine eingetragene Marke von Linus Torvalds. Namen von Distributionen, Desktops und Apps gehören den jeweiligen Eigentümern."
+footer_bottom = "© 2026 puldistro. Linux ist eine eingetragene Marke von Linus Torvalds. Namen von Distributionen, Desktops und Apps gehören den jeweiligen Eigentümern."
 
 [index]
-title = "Linux-Distro-Helfer"
-eyebrow = "◇ Moderner Linux-Distro-Picker"
+title = "puldistro"
+eyebrow = "◇ puldistro — Pick your Linux distro"
 hero_title = "Finde Dein <span class=\"gradient\">Linux</span>."
 lead = "Beantworte einen geführten Fragebogen zu Erfahrung, Hardware, Desktop-Vorlieben, Update-Stil, Gaming-Anforderungen, Datenschutz und deiner Toleranz für manuelle Wartung. Du erhältst die drei passendsten Linux-Distro-Empfehlungen mit Begründungen."
 stat_questions = "detaillierte Fragen"
@@ -66,13 +66,13 @@ empty = "Keine Treffer. Versuche eine breitere Suche oder wähle „Alle Kategor
 all_categories = "Alle Kategorien"
 
 [glossary]
-title = "Glossar | DistroPicker"
+title = "Glossar | puldistro"
 eyebrow = "Glossar in Klartext"
 hero_title = "Linux-Begriffe, <span class=\"gradient\">ohne Fachchinesisch</span>."
 lead = "Das sind die Begriffe, die im Quiz und auf den App-Alternativen-Seiten verwendet werden. Tooltips erklären viele davon direkt im Quiz; diese Seite ist die zentrale Referenz."
 
 [fallback]
-title = "Windows/macOS-Fallback-Leitfaden | DistroPicker"
+title = "Windows/macOS-Fallback-Leitfaden | puldistro"
 eyebrow = "Fallback-Leitfaden für den Umstieg"
 hero_title = "Halte <span class=\"gradient\">Windows oder macOS</span> bereit, wenn Linux nicht reicht."
 lead = "Ein Fallback ist ein Sicherheitsplan für Apps, Spiele, Hardwaretools, Schul-/Arbeitsanforderungen oder Kreativ-Workflows, die unter Linux noch nicht gut funktionieren. So kannst du Linux für das meiste nutzen, ohne deinen Pflicht-Workflow zu riskieren."
@@ -94,10 +94,10 @@ read_glossary = "Glossar lesen"
 take_quiz = "Distro-Quiz starten"
 
 [about]
-title = "Über | DistroPicker"
+title = "Über | puldistro"
 eyebrow = "Über dieses Projekt"
 heading = "Ein praktischer Helfer zur Linux-Auswahl."
-intro = "DistroPicker hilft Neueinsteigern, Linux-Distributionen und gängige App-Alternativen ohne Linux-Vorwissen zu vergleichen."
+intro = "puldistro hilft Neueinsteigern, Linux-Distributionen und gängige App-Alternativen ohne Linux-Vorwissen zu vergleichen."
 what_does = "Was es tut"
 does_1 = "Stellt verständliche Fragen zu Computer, Gewohnheiten, Apps, Spielen und Wartungskomfort."
 does_2 = "Empfiehlt Linux-Distributionen und Desktop-Oberflächen anhand deiner Präferenzen."
@@ -106,10 +106,10 @@ what_not = "Was es nicht tut"
 not_text = "Es kann deinen exakten Computer nicht testen und nicht garantieren, dass jedes Gerät, Spiel oder jede Profi-App funktioniert. Bevor du Windows ersetzt, teste deinen echten Workflow mit Live-USB, separatem Laufwerk, Dual-Boot oder Ersatzgerät."
 
 [privacy]
-title = "Datenschutz | DistroPicker"
+title = "Datenschutz | puldistro"
 eyebrow = "Datenschutz"
 heading = "Datenschutzfreundlich konzipiert."
-intro = "DistroPicker ist eine statische Website. Das Quiz läuft in deinem Browser und benötigt kein Konto."
+intro = "puldistro ist eine statische Website. Das Quiz läuft in deinem Browser und benötigt kein Konto."
 data_title = "Datenerhebung"
 data_1 = "Quiz-Antworten werden von dieser Website an keinen Server gesendet."
 data_2 = "Für Quiz oder Glossar sind keine Cookies erforderlich."
@@ -120,18 +120,18 @@ storage_title = "Lokaler Speicher"
 storage_text = "Die Website speichert nur deine Hell-/Dunkel-Designauswahl im lokalen Speicher, damit sie seitenübergreifend erhalten bleibt. Quiz-Antworten werden nicht gespeichert; Aktualisieren oder Neustarten des Quiz setzt sie zurück."
 
 [legal]
-title = "Impressum | DistroPicker"
+title = "Impressum | puldistro"
 eyebrow = "Rechtliches"
 heading = "Impressum und Haftungsausschlüsse."
 publishing_html = "<strong>Veröffentlichungshinweis:</strong> Rechtliche Anforderungen hängen von deinem Land ab. Ergänze vor öffentlicher Veröffentlichung echte Betreiber-/Kontaktdaten."
 operator_title = "Betreiber"
-operator_text = "DistroPicker wird als informative, pädagogische Website bereitgestellt. Ersetze diesen Absatz durch die rechtlich erforderlichen Angaben zu Betreiber, Adresse und Kontakt für deine Rechtsordnung."
+operator_text = "puldistro wird als informative, pädagogische Website bereitgestellt. Ersetze diesen Absatz durch die rechtlich erforderlichen Angaben zu Betreiber, Adresse und Kontakt für deine Rechtsordnung."
 warranty_title = "Keine Gewährleistung"
 warranty_text = "Empfehlungen sind Präferenz-Treffer, keine Garantien. Hardware-Support, App-Kompatibilität, Spiele-Support und Update-Verhalten können sich ändern."
 trademarks_title = "Marken"
 trademarks_text = "Linux ist eine eingetragene Marke von Linus Torvalds. Namen von Distributionen, Desktop-Umgebungen, Anwendungen und Unternehmen sind Marken oder eingetragene Marken ihrer jeweiligen Eigentümer. Diese Website ist nicht mit diesen Projekten verbunden, sofern nicht ausdrücklich angegeben."
 external_title = "Externe Inhalte"
-external_text = "Externe Links dienen der Bequemlichkeit. DistroPicker ist nicht verantwortlich für Inhalte, Sicherheit oder Datenschutzpraktiken von Drittwebsites."
+external_text = "Externe Links dienen der Bequemlichkeit. puldistro ist nicht verantwortlich für Inhalte, Sicherheit oder Datenschutzpraktiken von Drittwebsites."
 
 [index_data]
 distros_json = """

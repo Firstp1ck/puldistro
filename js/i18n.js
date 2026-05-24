@@ -1,8 +1,8 @@
 (() => {
   const root = document.documentElement;
-  const langStorageKey = "distropicker-language";
+  const langStorageKey = "puldistro-language";
   const langUrlParam = "lang";
-  const languageChannelName = "distropicker-language";
+  const languageChannelName = "puldistro-language";
   const defaultLanguage = "en";
   const supportedLanguages = ["en", "de"];
   const scriptBaseUrl = new URL(".", document.currentScript?.src || window.location.href);

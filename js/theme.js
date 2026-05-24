@@ -1,6 +1,6 @@
 (() => {
   const root = document.documentElement;
-  const storageKey = "distropicker-theme";
+  const storageKey = "puldistro-theme";
   const validThemes = new Set(["light", "dark"]);
 
   const getStoredTheme = () => {

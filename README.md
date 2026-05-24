@@ -1,4 +1,4 @@
-# DistroPicker
+# puldistro
 
 A simple helper for people who want to try Linux but are not sure where to start.
 
@@ -11,7 +11,7 @@ A simple helper for people who want to try Linux but are not sure where to start
 
 ## How it works
 
-Answer a few questions about your computer, experience, apps, games, and preferences. DistroPicker then suggests your top Linux matches and explains why they may fit you.
+Answer a few questions about your computer, experience, apps, games, and preferences. puldistro then suggests your top Linux matches and explains why they may fit you.
 
 ## Important note
 
