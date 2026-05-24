@@ -7,9 +7,23 @@ const json = (data, init = {}) => new Response(JSON.stringify(data), {
   },
 });
 
+const corsJson = (data, init = {}) => json(data, {
+  ...init,
+  headers: {
+    ...CORS_HEADERS,
+    ...(init.headers || {}),
+  },
+});
+
 const MAX_BODY_BYTES = 32 * 1024;
 const MAX_JSON_CHARS = 24 * 1024;
 const VALID_MODES = new Set(["simple", "medium", "detailed"]);
+const CORS_HEADERS = {
+  "access-control-allow-origin": "*",
+  "access-control-allow-methods": "GET, OPTIONS",
+  "access-control-allow-headers": "authorization, x-admin-token, content-type",
+  "access-control-max-age": "86400",
+};
 const DEFAULT_READ_LIMIT = 500;
 const MAX_READ_LIMIT = 5000;
 
@@ -161,13 +175,20 @@ export async function onRequestPost({ request, env }) {
   return json({ ok: true });
 }
 
+export async function onRequestOptions() {
+  return new Response(null, {
+    status: 204,
+    headers: CORS_HEADERS,
+  });
+}
+
 export async function onRequestGet({ request, env }) {
   if (!env.DB) {
-    return json({ ok: false, error: "D1 binding DB is not configured." }, { status: 500 });
+    return corsJson({ ok: false, error: "D1 binding DB is not configured." }, { status: 500 });
   }
 
   if (!isAuthorizedRead(request, env)) {
-    return json({ ok: false, error: "Unauthorized. Set ADMIN_API_TOKEN and pass it as a Bearer token, or use localhost for local development." }, { status: 401 });
+    return corsJson({ ok: false, error: "Unauthorized. Set ADMIN_API_TOKEN and pass it as a Bearer token, or use localhost for local development." }, { status: 401 });
   }
 
   const url = new URL(request.url);
@@ -192,7 +213,7 @@ export async function onRequestGet({ request, env }) {
     top_results_json: row.top_results_json,
   }));
 
-  return json({
+  return corsJson({
     ok: true,
     generatedAt: new Date().toISOString(),
     limit,
