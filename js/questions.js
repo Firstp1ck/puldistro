@@ -3,9 +3,11 @@
   const count = document.getElementById("questionsCount");
   const search = document.getElementById("questionSearch");
   const empty = document.getElementById("questionsEmpty");
-  const tierNames = { 1: "Simple", 2: "Medium", 3: "Detailed" };
+  const tierFallbacks = { 1: "Simple", 2: "Medium", 3: "Detailed" };
 
   const t = (key, fallback, params) => window.DistroI18n?.t(key, params, fallback) || fallback;
+  const tierName = (tier) => t(`questions.tier_${tier}`, tierFallbacks[tier] || tier);
+  const criterionLabel = (key) => t(`criteria.${key}`, key.replace(/([A-Z])/g, " $1").replace(/^./, c => c.toUpperCase()));
   const normalize = (value) => String(value || "").toLocaleLowerCase();
 
   const appendHighlightedText = (element, text, pattern) => {
@@ -44,20 +46,22 @@
   const formatWeights = (weights = {}) => {
     const entries = Object.entries(weights);
     if (!entries.length) return t("questions.no_signals", "No scoring signal");
-    return entries.map(([key, value]) => `${key} +${value}`).join(", ");
+    return entries.map(([key, value]) => `${criterionLabel(key)} +${value}`).join(", ");
   };
 
-  const getQuestionTags = (question) => {
+  const getQuestionTags = (question, translated = true) => {
     const weightTags = question.answers.flatMap((answer) => Object.keys(answer.weights || {}));
-    return [...new Set([question.category, tierNames[question.tier] || question.tier, ...weightTags])];
+    const labels = translated ? weightTags.map(criterionLabel) : weightTags;
+    return [...new Set([question.category, tierName(question.tier), ...labels])];
   };
 
   const getSearchHaystack = (question) => [
     question.text,
     question.hint,
     question.category,
-    tierNames[question.tier] || question.tier,
+    tierName(question.tier),
     ...getQuestionTags(question),
+    ...getQuestionTags(question, false),
     ...question.answers.flatMap((answer) => [answer.label, formatWeights(answer.weights), ...Object.keys(answer.weights || {})]),
   ].join(" ");
 
@@ -90,7 +94,7 @@
       const card = document.createElement("article");
       card.className = "qa-card glass";
 
-      const metaText = `${t("questions.question", "Question")} ${question.id} · ${question.category} · ${tierNames[question.tier] || question.tier}`;
+      const metaText = `${t("questions.question", "Question")} ${question.id} · ${question.category} · ${tierName(question.tier)}`;
       const meta = textElement("div", "qa-meta", metaText, pattern);
       meta.title = `${t("questions.tags", "Tags")}: ${getQuestionTags(question).join(", ")}`;
 

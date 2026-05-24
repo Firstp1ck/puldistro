@@ -182,7 +182,12 @@
       if (!response.ok) throw new Error(`Could not load locale ${requestedLanguage}: ${response.status}`);
       nextTranslations = parseToml(await response.text());
     } catch (error) {
-      console.warn("Could not load live locale file. Serve the site over http:// instead of file:// so locales/*.toml can be loaded.", error);
+      const bundledLocale = window.DistroLocaleText?.[requestedLanguage];
+      if (bundledLocale) {
+        nextTranslations = parseToml(bundledLocale);
+      } else {
+        console.warn("Could not load live locale file or bundled locale fallback. Serve the site over http:// instead of file:// so locales/*.toml can be loaded.", error);
+      }
     }
 
     if (requestId !== loadRequestId) return translations;

@@ -192,13 +192,21 @@
 
     function compatibilityRecommendations() {
       const notes = [];
-      if ((scores.proWindowsApps || 0) >= 6) notes.push({title:"Professional Windows apps", text:"Keep Windows available through dual boot, a dedicated Windows machine, or a VM. Adobe Creative Cloud, AutoCAD/SolidWorks/Revit, QuickBooks Desktop, tax tools, and internal company apps are often not painless on Linux."});
-      if ((scores.officeCompat || 0) >= 5) notes.push({title:"Microsoft Office compatibility", text:"Use Microsoft 365 web, OnlyOffice, or LibreOffice for normal documents. If you need advanced Excel macros/VBA, Access, or exact formatting, keep a Windows fallback."});
-      if ((scores.antiCheat || 0) >= 5) notes.push({title:"Anti-cheat games", text:"Before switching, check ProtonDB and AreWeAntiCheatYet for your exact games. If Valorant, Fortnite, Warzone/Call of Duty, Destiny 2, or similar titles are non-negotiable, plan for dual boot."});
-      if ((scores.vendorUtilities || 0) >= 4) notes.push({title:"Vendor utilities", text:"Hardware may work, but RGB, fan, mouse macro, stream deck, audio interface, or printer vendor apps may need alternatives such as OpenRGB, Piper, Solaar, or a Windows fallback."});
-      if ((scores.dualBootRecommended || 0) >= 5) notes.push({title:"Recommended migration path", text:`Do not wipe Windows immediately. Start with <a href="${dualBootLink}" target="_blank" rel="noopener noreferrer">dual boot</a> or a separate SSD, test your required apps/games/peripherals, then move fully only if the blockers are solved.`});
-      if (!notes.length) notes.push({title:"Linux readiness", text:"Your answers do not show major Windows-only blockers. You can likely choose based on distro, desktop environment/window manager, update model, and hardware preferences."});
+      const note = (titleKey, titleFallback, textKey, textFallback, params) => ({
+        title: tr(titleKey, titleFallback, params),
+        text: tr(textKey, textFallback, params),
+      });
+      if ((scores.proWindowsApps || 0) >= 6) notes.push(note("index.compat_professional_windows_apps_title", "Professional Windows apps", "index.compat_professional_windows_apps_text", "Keep Windows available through dual boot, a dedicated Windows machine, or a VM. Adobe Creative Cloud, AutoCAD/SolidWorks/Revit, QuickBooks Desktop, tax tools, and internal company apps are often not painless on Linux."));
+      if ((scores.officeCompat || 0) >= 5) notes.push(note("index.compat_office_title", "Microsoft Office compatibility", "index.compat_office_text", "Use Microsoft 365 web, OnlyOffice, or LibreOffice for normal documents. If you need advanced Excel macros/VBA, Access, or exact formatting, keep a Windows fallback."));
+      if ((scores.antiCheat || 0) >= 5) notes.push(note("index.compat_anticheat_title", "Anti-cheat games", "index.compat_anticheat_text", "Before switching, check ProtonDB and AreWeAntiCheatYet for your exact games. If Valorant, Fortnite, Warzone/Call of Duty, Destiny 2, or similar titles are non-negotiable, plan for dual boot."));
+      if ((scores.vendorUtilities || 0) >= 4) notes.push(note("index.compat_vendor_title", "Vendor utilities", "index.compat_vendor_text", "Hardware may work, but RGB, fan, mouse macro, stream deck, audio interface, or printer vendor apps may need alternatives such as OpenRGB, Piper, Solaar, or a Windows fallback."));
+      if ((scores.dualBootRecommended || 0) >= 5) notes.push(note("index.compat_migration_title", "Recommended migration path", "index.compat_migration_text", `Do not wipe Windows immediately. Start with <a href="{dualBootLink}" target="_blank" rel="noopener noreferrer">dual boot</a> or a separate SSD, test your required apps/games/peripherals, then move fully only if the blockers are solved.`, { dualBootLink }));
+      if (!notes.length) notes.push(note("index.compat_readiness_title", "Linux readiness", "index.compat_readiness_text", "Your answers do not show major Windows-only blockers. You can likely choose based on distro, desktop environment/window manager, update model, and hardware preferences."));
       return notes;
+    }
+
+    function criterionLabel(key) {
+      return tr(`criteria.${key}`, key.replace(/([A-Z])/g, " $1").replace(/^./, c => c.toUpperCase()));
     }
 
     function topReasons(distro) {
@@ -207,7 +215,7 @@
         .filter(item => item.value > 0)
         .sort((a,b) => b.value - a.value)
         .slice(0, 3)
-        .map(item => item.key.replace(/([A-Z])/g, " $1").replace(/^./, c => c.toUpperCase()));
+        .map(item => criterionLabel(item.key));
     }
 
     function showResults() {

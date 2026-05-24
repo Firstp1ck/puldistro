@@ -53,7 +53,28 @@
       "Native Linux clients": "https://flathub.org/",
       "Web apps": "https://flathub.org/apps/search?q=webapp",
       "Flatpak versions": "https://flathub.org/",
-      "GNOME/KDE Wayland sessions": "https://wayland.freedesktop.org/"
+      "GNOME/KDE Wayland sessions": "https://wayland.freedesktop.org/",
+      "Fusion/Autodesk web workflows": "https://www.autodesk.com/products/fusion-360/overview",
+      "Web version of the same product": "fallback.html",
+      "Windows machine": "fallback.html",
+      "Windows Dual-Boot/VM": "https://wiki.archlinux.org/title/Dual_boot_with_Windows",
+      "Windows VM / Dual-Boot": "https://wiki.archlinux.org/title/Dual_boot_with_Windows",
+      "Windows-/macOS-Fallback": "fallback.html",
+      "Windows-Fallback": "fallback.html",
+      "Dual-Boot / Windows-Workstation": "fallback.html",
+      "Dual-Boot Windows": "fallback.html",
+      "Windows-VM / Remote Desktop": "fallback.html",
+      "Windows-Rechner": "fallback.html",
+      "ProtonDB prüfen": "https://www.protondb.com/",
+      "Cloud-Gaming": "https://www.xbox.com/play/",
+      "Fusion-/Autodesk-Web-Workflows": "https://www.autodesk.com/products/fusion-360/overview",
+      "Webversion desselben Produkts": "fallback.html",
+      "v4l2 Werkzeuge": "https://linuxtv.org/wiki/index.php/V4l-utils",
+      "Dev-Container": "https://containers.dev/",
+      "Native Linux-Clients": "https://flathub.org/",
+      "Web Apps": "https://flathub.org/apps/search?q=webapp",
+      "Flatpak-Versionen": "https://flathub.org/",
+      "GNOME-/KDE-Wayland-Sitzungen": "https://wayland.freedesktop.org/"
     };
 
     const grid = document.getElementById("grid");
@@ -64,6 +85,8 @@
     let activeCategory = "All";
 
     const tr = (key, fallback, params) => window.DistroI18n?.t(key, params, fallback) || fallback;
+    const allCategory = () => categories()[0] || "All";
+    const isAllCategory = (category) => category === "All" || category === allCategory();
 
     function statusLabel(level) {
       return level === "easy"
@@ -77,8 +100,8 @@
       filters.innerHTML = "";
       categories().forEach(category => {
         const button = document.createElement("button");
-        button.className = `chip ${category === activeCategory ? "active" : ""}`;
-        button.textContent = category === "All" ? tr("alternatives.all_categories", "All categories") : category;
+        button.className = `chip ${category === activeCategory || (isAllCategory(category) && isAllCategory(activeCategory)) ? "active" : ""}`;
+        button.textContent = isAllCategory(category) ? tr("alternatives.all_categories", "All categories") : category;
         button.addEventListener("click", () => {
           activeCategory = category;
           renderFilters();
@@ -91,7 +114,7 @@
     function matches(item) {
       const term = search.value.trim().toLowerCase();
       const haystack = [item.category, item.windows, item.summary, ...item.tags, ...item.alternatives.flat()].join(" ").toLowerCase();
-      const categoryOk = activeCategory === "All" || item.category === activeCategory;
+      const categoryOk = isAllCategory(activeCategory) || item.category === activeCategory;
       const difficultyOk = difficulty.value === "all" || item.difficulty === difficulty.value;
       const searchOk = !term || haystack.includes(term);
       return categoryOk && difficultyOk && searchOk;
@@ -129,6 +152,7 @@
     renderFilters();
     render();
     window.addEventListener("i18n:applied", () => {
+      if (!categories().includes(activeCategory) && !isAllCategory(activeCategory)) activeCategory = allCategory();
       renderFilters();
       render();
     });
