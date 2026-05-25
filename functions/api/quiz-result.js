@@ -40,6 +40,8 @@ const sanitizeAnswers = (answers) => {
   return answers.slice(0, 60).map((answer) => ({
     questionId: Number.isFinite(answer?.questionId) ? answer.questionId : null,
     category: clampString(answer?.category, 80),
+    questionText: clampString(answer?.questionText, 320),
+    questionHint: clampString(answer?.questionHint, 420),
     answerIndex: Number.isFinite(answer?.answerIndex) ? answer.answerIndex : null,
     answerLabel: clampString(answer?.answerLabel, 240),
     weights: isPlainObject(answer?.weights) ? answer.weights : {},

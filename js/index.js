@@ -145,6 +145,8 @@
       history.push({
         questionId: current.id,
         category: current.category,
+        questionText: current.text,
+        questionHint: current.hint,
         answerIndex: current.answers.indexOf(answer),
         answerLabel: answer.label,
         weights: answer.weights,
