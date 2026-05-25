@@ -1,6 +1,5 @@
 # Local development artifacts
 dev/COMMIT/
-dev/results-dashboard.html
 .wrangler/
 node_modules/
 

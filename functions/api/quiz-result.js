@@ -198,7 +198,7 @@ export async function onRequestGet({ request, env }) {
     : DEFAULT_READ_LIMIT;
 
   const result = await env.DB.prepare(`
-    SELECT id, created_at, mode, language, top_results_json
+    SELECT id, created_at, mode, language, answers_json, scores_json, top_results_json
     FROM quiz_results
     ORDER BY created_at DESC
     LIMIT ?
@@ -209,7 +209,11 @@ export async function onRequestGet({ request, env }) {
     created_at: row.created_at,
     mode: row.mode,
     language: row.language,
+    answers: parseStoredJson(row.answers_json, []),
+    scores: parseStoredJson(row.scores_json, {}),
     topResults: parseStoredJson(row.top_results_json, []),
+    answers_json: row.answers_json,
+    scores_json: row.scores_json,
     top_results_json: row.top_results_json,
   }));
 
@@ -218,7 +222,7 @@ export async function onRequestGet({ request, env }) {
     generatedAt: new Date().toISOString(),
     limit,
     total: rows.length,
-    rows: rows.map(({ top_results_json: _topResultsJson, ...row }) => row),
+    rows: rows.map(({ answers_json: _answersJson, scores_json: _scoresJson, top_results_json: _topResultsJson, ...row }) => row),
     aggregates: buildAggregates(result.results || []),
   });
 }

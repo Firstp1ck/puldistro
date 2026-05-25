@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Puldistro local quiz results dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0d1018;
+      color: #eef2ff;
+      --panel: rgba(23, 27, 38, 0.86);
+      --panel-strong: rgba(18, 22, 33, 0.94);
+      --line: rgba(148, 163, 184, 0.18);
+      --muted: #9aa6bb;
+      --text: #eef2ff;
+      --accent: #8b5cf6;
+      --accent-2: #22d3ee;
+      --success: #34d399;
+      --danger: #fca5a5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      padding: 40px;
+      background:
+        radial-gradient(circle at top left, rgba(139, 92, 246, 0.22), transparent 34rem),
+        radial-gradient(circle at top right, rgba(34, 211, 238, 0.12), transparent 30rem),
+        #0d1018;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(30px, 4vw, 48px); letter-spacing: -0.04em; }
+    p { color: var(--muted); }
+    code { border: 1px solid var(--line); border-radius: 8px; padding: 2px 6px; background: rgba(15, 19, 32, 0.72); color: #dbeafe; }
+    .controls, .card, .metric {
+      background: linear-gradient(180deg, rgba(31, 35, 52, 0.9), rgba(18, 22, 33, 0.92));
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 55px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(12px);
+    }
+    .controls { display: grid; grid-template-columns: minmax(260px, 1fr) minmax(180px, 360px) auto; gap: 14px; align-items: end; margin: 26px 0; border-radius: 22px; padding: 18px; }
+    label { display: grid; gap: 7px; color: #cbd5e1; font-size: 13px; font-weight: 700; letter-spacing: 0.01em; }
+    input, button { border: 1px solid rgba(148, 163, 184, 0.22); border-radius: 12px; padding: 12px 13px; background: rgba(9, 12, 22, 0.76); color: var(--text); font: inherit; outline: none; }
+    input:focus { border-color: rgba(139, 92, 246, 0.72); box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.16); }
+    input[type="checkbox"] { width: auto; accent-color: var(--accent); }
+    button { cursor: pointer; background: linear-gradient(135deg, #7c3aed, #2563eb); border-color: rgba(255, 255, 255, 0.12); font-weight: 800; }
+    button:hover { filter: brightness(1.08); transform: translateY(-1px); }
+    .token-options { display: flex; align-items: center; gap: 12px; margin-top: 2px; color: var(--muted); font-size: 13px; font-weight: 500; }
+    .token-options label { display: flex; grid: none; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; }
+    .link-button { background: transparent; border: 0; color: #b8c0d6; cursor: pointer; padding: 0; font-weight: 600; text-decoration: underline; box-shadow: none; }
+    .link-button:hover { color: #fff; transform: none; filter: none; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 20px; }
+    .card { overflow: hidden; border-radius: 22px; padding: 20px; }
+    .card h2 { display: flex; align-items: center; gap: 9px; margin: 0 0 16px; font-size: 18px; letter-spacing: -0.02em; }
+    .card h2::before { content: ""; width: 9px; height: 9px; border-radius: 999px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 0 22px rgba(139, 92, 246, 0.9); }
+    .wide { grid-column: 1 / -1; }
+    .summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin: 0 0 20px; }
+    .metric { border-radius: 18px; padding: 16px; }
+    .metric span { color: var(--muted); font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; }
+    .metric strong { display: block; margin-top: 5px; font-size: 26px; letter-spacing: -0.04em; }
+    .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 16px; background: rgba(9, 12, 22, 0.45); }
+    table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 14px; }
+    th, td { border-bottom: 1px solid var(--line); padding: 13px 14px; text-align: left; vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: rgba(139, 92, 246, 0.08); }
+    th { color: #b8c0d6; font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+    .id-cell { color: var(--muted); font-variant-numeric: tabular-nums; }
+    .date-cell { min-width: 160px; }
+    .date-main { display: block; color: #e5e7eb; font-weight: 700; }
+    .date-sub { display: block; margin-top: 2px; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+    .pill { display: inline-flex; align-items: center; border: 1px solid rgba(148, 163, 184, 0.18); border-radius: 999px; padding: 5px 9px; background: rgba(148, 163, 184, 0.09); color: #dbeafe; font-size: 12px; font-weight: 800; text-transform: capitalize; }
+    .winner { display: grid; gap: 3px; }
+    .winner-main { color: #fff; font-weight: 800; }
+    .winner-sub { color: var(--muted); font-size: 12px; }
+    .score-pill { justify-self: start; border-color: rgba(52, 211, 153, 0.25); background: rgba(52, 211, 153, 0.1); color: #a7f3d0; }
+    .ghost-btn { padding: 8px 10px; border-radius: 10px; background: rgba(148, 163, 184, 0.1); color: #e0e7ff; font-size: 12px; box-shadow: none; }
+    .ghost-btn:hover { background: rgba(139, 92, 246, 0.22); }
+    tr.selected { background: rgba(139, 92, 246, 0.16); }
+    .detail-grid { display: grid; grid-template-columns: minmax(260px, 0.9fr) minmax(320px, 1.4fr); gap: 16px; }
+    .detail-panel { border: 1px solid var(--line); border-radius: 16px; padding: 16px; background: rgba(9, 12, 22, 0.45); }
+    .detail-panel h3 { margin: 0 0 12px; font-size: 15px; color: #dbeafe; }
+    .detail-list { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+    .detail-item { border: 1px solid rgba(148, 163, 184, 0.14); border-radius: 14px; padding: 12px; background: rgba(15, 19, 32, 0.62); }
+    .detail-meta { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 7px; }
+    .answer-label { display: block; color: #fff; font-weight: 800; }
+    .weights { margin-top: 7px; color: var(--muted); font-size: 12px; word-break: break-word; }
+    .score-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px; }
+    .score-cell { border: 1px solid rgba(148, 163, 184, 0.14); border-radius: 12px; padding: 10px; background: rgba(15, 19, 32, 0.62); }
+    .score-cell span { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .score-cell strong { display: block; margin-top: 4px; font-size: 18px; }
+    .empty { color: var(--muted); padding: 18px; }
+    .status { min-height: 24px; color: var(--muted); }
+    .error { color: var(--danger); }
+    @media (max-width: 900px) { .detail-grid { grid-template-columns: 1fr; } }
+    @media (max-width: 760px) { body { padding: 20px; } .controls { grid-template-columns: 1fr; } .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <h1>Puldistro quiz results dashboard</h1>
+  <p>Local/private view for anonymous D1 submissions. Run with <code>npx wrangler pages dev . --ip 127.0.0.1 --port 8788</code> and open this file through that local server.</p>
+
+  <section class="controls">
+    <label>
+      API URL
+      <input id="apiUrl" value="https://puldistro.pages.dev/api/quiz-result?limit=2000" autocomplete="off">
+    </label>
+    <label>
+      Admin token (optional for localhost)
+      <input id="token" name="admin-api-token" type="password" placeholder="ADMIN_API_TOKEN" autocomplete="current-password">
+      <span class="token-options">
+        <label><input id="rememberToken" type="checkbox" checked> Remember locally</label>
+        <button id="clearTokenBtn" class="link-button" type="button">Clear saved token</button>
+      </span>
+    </label>
+    <button id="loadBtn">Load data</button>
+  </section>
+
+  <p id="status" class="status"></p>
+  <section id="summary" class="summary"></section>
+
+  <main class="grid">
+    <section class="card"><h2>Submissions by day</h2><canvas id="byDay"></canvas></section>
+    <section class="card"><h2>Quiz modes</h2><canvas id="byMode"></canvas></section>
+    <section class="card"><h2>First-choice distro</h2><canvas id="firstChoice"></canvas></section>
+    <section class="card"><h2>Recommended interfaces</h2><canvas id="interfaces"></canvas></section>
+    <section class="card"><h2>Languages</h2><canvas id="languages"></canvas></section>
+    <section class="card wide"><h2>Latest submissions</h2><div id="latest"></div></section>
+    <section class="card wide"><h2>Submission detail</h2><div id="submissionDetail" class="empty">Select a submission to inspect its answers, scores, and recommendation results.</div></section>
+  </main>
+
+  <script>
+    const charts = new Map();
+    const palette = ["#818cf8", "#22c55e", "#f59e0b", "#ef4444", "#06b6d4", "#ec4899", "#a855f7", "#84cc16", "#f97316", "#14b8a6"];
+    const TOKEN_STORAGE_KEY = "puldistro-dashboard-admin-token";
+    let currentRows = [];
+    let selectedSubmissionId = null;
+
+    function setStatus(message, isError = false) {
+      const status = document.getElementById("status");
+      status.textContent = message;
+      status.className = `status${isError ? " error" : ""}`;
+    }
+
+    function destroyChart(id) {
+      const oldChart = charts.get(id);
+      if (oldChart) oldChart.destroy();
+    }
+
+    function chartCounts(id, labels, values, type = "bar") {
+      destroyChart(id);
+      const ctx = document.getElementById(id);
+      charts.set(id, new Chart(ctx, {
+        type,
+        data: { labels, datasets: [{ label: "Count", data: values, backgroundColor: palette }] },
+        options: {
+          responsive: true,
+          plugins: { legend: { display: type !== "bar" } },
+          scales: type === "bar" ? { y: { beginAtZero: true, ticks: { precision: 0 } } } : undefined,
+        },
+      }));
+    }
+
+    function renderSummary(data) {
+      const firstCreatedAt = data.rows.at(-1)?.created_at || "n/a";
+      const latestCreatedAt = data.rows[0]?.created_at || "n/a";
+      document.getElementById("summary").innerHTML = `
+        <div class="metric"><span>Loaded rows</span><strong>${data.total}</strong></div>
+        <div class="metric"><span>First row</span><strong>${firstCreatedAt.slice(0, 10)}</strong></div>
+        <div class="metric"><span>Latest row</span><strong>${latestCreatedAt.slice(0, 10)}</strong></div>
+        <div class="metric"><span>Generated</span><strong>${new Date(data.generatedAt).toLocaleTimeString()}</strong></div>
+      `;
+    }
+
+    function formatDateParts(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return { day: value || "n/a", time: "" };
+      return {
+        day: date.toLocaleDateString(undefined, { year: "numeric", month: "short", day: "2-digit" }),
+        time: date.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit", second: "2-digit" }),
+      };
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "").replace(/[&<>'"]/g, (char) => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "'": "&#39;",
+        '"': "&quot;",
+      })[char]);
+    }
+
+    function formatJson(value) {
+      return escapeHtml(JSON.stringify(value ?? {}, null, 2));
+    }
+
+    function renderLatest(rows) {
+      if (!rows.length) {
+        document.getElementById("latest").innerHTML = `<div class="empty">No submissions loaded.</div>`;
+        document.getElementById("submissionDetail").innerHTML = `Select a submission to inspect its answers, scores, and recommendation results.`;
+        return;
+      }
+
+      const html = rows.slice(0, 50).map((row) => {
+        const winner = row.topResults?.[0];
+        const created = formatDateParts(row.created_at);
+        const isSelected = row.id === selectedSubmissionId;
+        return `<tr class="${isSelected ? "selected" : ""}">
+          <td class="id-cell">#${escapeHtml(row.id)}</td>
+          <td class="date-cell"><span class="date-main">${escapeHtml(created.day)}</span><span class="date-sub">${escapeHtml(created.time)}</span></td>
+          <td><span class="pill">${escapeHtml(row.mode || "unknown")}</span></td>
+          <td><span class="pill">${escapeHtml(row.language || "unknown")}</span></td>
+          <td>${winner ? `<div class="winner"><span class="winner-main">${escapeHtml(winner.distro)}</span><span class="winner-sub">${escapeHtml(winner.interface)}</span><span class="pill score-pill">${escapeHtml(winner.matchPercent)}% match</span></div>` : ""}</td>
+          <td><button class="ghost-btn" type="button" data-row-id="${escapeHtml(row.id)}">View answers</button></td>
+        </tr>`;
+      }).join("");
+      document.getElementById("latest").innerHTML = `<div class="table-wrap"><table>
+        <thead><tr><th>ID</th><th>Created</th><th>Mode</th><th>Lang</th><th>Top result</th><th>Detail</th></tr></thead>
+        <tbody>${html}</tbody>
+      </table></div>`;
+
+      document.querySelectorAll("[data-row-id]").forEach((button) => {
+        button.addEventListener("click", () => selectSubmission(Number(button.dataset.rowId)));
+      });
+    }
+
+    function renderSubmissionDetail(row) {
+      const detail = document.getElementById("submissionDetail");
+      if (!row) {
+        detail.className = "empty";
+        detail.innerHTML = "Select a submission to inspect its answers, scores, and recommendation results.";
+        return;
+      }
+
+      const created = formatDateParts(row.created_at);
+      const answers = Array.isArray(row.answers) ? row.answers : [];
+      const results = Array.isArray(row.topResults) ? row.topResults : [];
+      const scores = row.scores && typeof row.scores === "object" ? row.scores : {};
+      const sortedScores = Object.entries(scores).sort((a, b) => Number(b[1]) - Number(a[1]) || a[0].localeCompare(b[0]));
+
+      const answersHtml = answers.length ? answers.map((answer, index) => `<li class="detail-item">
+        <div class="detail-meta"><span class="pill">#${escapeHtml(answer.questionId ?? index + 1)}</span><span class="pill">${escapeHtml(answer.category || "unknown")}</span><span class="pill">answer ${escapeHtml((answer.answerIndex ?? 0) + 1)}</span></div>
+        <span class="answer-label">${escapeHtml(answer.answerLabel || "No answer label stored")}</span>
+        <div class="weights">Weights: <code>${formatJson(answer.weights)}</code></div>
+      </li>`).join("") : `<li class="empty">No answers stored for this submission.</li>`;
+
+      const resultsHtml = results.length ? results.map((result) => `<li class="detail-item">
+        <div class="detail-meta"><span class="pill">Rank ${escapeHtml(result.rank ?? "?")}</span><span class="pill score-pill">${escapeHtml(result.matchPercent ?? "?")}% match</span></div>
+        <span class="answer-label">${escapeHtml(result.distro || "Unknown distro")}</span>
+        <div class="winner-sub">${escapeHtml(result.interface || "Unknown interface")}</div>
+      </li>`).join("") : `<li class="empty">No recommendation results stored.</li>`;
+
+      const scoresHtml = sortedScores.length ? sortedScores.map(([name, value]) => `<div class="score-cell"><span>${escapeHtml(name)}</span><strong>${escapeHtml(value)}</strong></div>`).join("") : `<div class="empty">No scores stored.</div>`;
+
+      detail.className = "detail-grid";
+      detail.innerHTML = `
+        <div class="detail-panel">
+          <h3>Submission #${escapeHtml(row.id)}</h3>
+          <div class="detail-list">
+            <div class="detail-item"><span class="winner-sub">Created</span><span class="answer-label">${escapeHtml(created.day)} ${escapeHtml(created.time)}</span></div>
+            <div class="detail-item"><span class="winner-sub">Mode / language</span><span class="answer-label">${escapeHtml(row.mode || "unknown")} / ${escapeHtml(row.language || "unknown")}</span></div>
+          </div>
+          <h3 style="margin-top:16px">Top recommendations</h3>
+          <ul class="detail-list">${resultsHtml}</ul>
+        </div>
+        <div class="detail-panel">
+          <h3>Selected answers (${answers.length})</h3>
+          <ul class="detail-list">${answersHtml}</ul>
+        </div>
+        <div class="detail-panel wide">
+          <h3>Score signals</h3>
+          <div class="score-grid">${scoresHtml}</div>
+        </div>
+      `;
+    }
+
+    function selectSubmission(id) {
+      selectedSubmissionId = id;
+      renderLatest(currentRows);
+      renderSubmissionDetail(currentRows.find((row) => row.id === id));
+      document.getElementById("submissionDetail").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function render(data) {
+      currentRows = data.rows;
+      selectedSubmissionId = currentRows[0]?.id ?? null;
+      renderSummary(data);
+      const agg = data.aggregates;
+      chartCounts("byDay", agg.byDay.map((x) => x.date), agg.byDay.map((x) => x.count), "line");
+      chartCounts("byMode", agg.byMode.map((x) => x.name), agg.byMode.map((x) => x.count), "doughnut");
+      chartCounts("firstChoice", agg.firstChoiceDistros.slice(0, 12).map((x) => x.name), agg.firstChoiceDistros.slice(0, 12).map((x) => x.count));
+      chartCounts("interfaces", agg.interfaceMentions.slice(0, 12).map((x) => x.name), agg.interfaceMentions.slice(0, 12).map((x) => x.count));
+      chartCounts("languages", agg.byLanguage.map((x) => x.name), agg.byLanguage.map((x) => x.count), "doughnut");
+      renderLatest(currentRows);
+      renderSubmissionDetail(currentRows.find((row) => row.id === selectedSubmissionId));
+    }
+
+    function loadSavedToken() {
+      const savedToken = localStorage.getItem(TOKEN_STORAGE_KEY);
+      if (savedToken) document.getElementById("token").value = savedToken;
+    }
+
+    function saveTokenIfRequested(token) {
+      if (document.getElementById("rememberToken").checked && token) {
+        localStorage.setItem(TOKEN_STORAGE_KEY, token);
+      }
+    }
+
+    function clearSavedToken() {
+      localStorage.removeItem(TOKEN_STORAGE_KEY);
+      document.getElementById("token").value = "";
+      setStatus("Saved token cleared.");
+    }
+
+    async function loadData() {
+      const apiUrl = document.getElementById("apiUrl").value.trim();
+      const token = document.getElementById("token").value.trim();
+      setStatus("Loading…");
+      try {
+        const response = await fetch(apiUrl, { headers: token ? { authorization: `Bearer ${token}` } : {} });
+        const data = await response.json().catch(() => ({}));
+        if (!response.ok || data.ok !== true) throw new Error(data.error || `HTTP ${response.status}`);
+        saveTokenIfRequested(token);
+        render(data);
+        setStatus(`Loaded ${data.total} rows.`);
+      } catch (error) {
+        setStatus(`Could not load data: ${error.message}`, true);
+      }
+    }
+
+    document.getElementById("loadBtn").addEventListener("click", loadData);
+    document.getElementById("clearTokenBtn").addEventListener("click", clearSavedToken);
+    loadSavedToken();
+    loadData();
+  </script>
+</body>
+</html>
